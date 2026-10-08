@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -25,9 +26,9 @@ public class Johnathan_X {
     private Drivetrain drive;
     private Telemetry telem;
 
-    public DcMotor motorFL, motorFR, motorBL, motorBR;
+    public DcMotor motorFL, motorFR, motorBL, motorBR, /*motorLaunch,*/ motorViper;
     public DcMotor[] allDriveMotors;
-
+    public Servo servoClaw;
     /*public IMU imu;
     private IMU.Parameters parameters;*/
     public AprilTagProcessor aprilTag;
@@ -82,6 +83,9 @@ public class Johnathan_X {
                 motorFR = hwMap.dcMotor.get("motorFR");
                 motorBL = hwMap.dcMotor.get("motorBL");
                 motorBR = hwMap.dcMotor.get("motorBR");
+                //motorLaunch = hwMap.dcMotor.get("motorLaunch");
+                motorViper = hwMap.dcMotor.get("motorViper");
+                servoClaw = hwMap.servo.get("servoClaw");
 
                 allDriveMotors = new DcMotor[]{motorBR,motorBL,motorFL,motorFR};
                 motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -205,7 +209,27 @@ public class Johnathan_X {
         waitForMotors();
         resetDriveEncoders();
     }
+
     public void turnLeftDegrees(double degrees, double speed){
         turnRightDegrees(-degrees, -speed);
+    }
+
+    /*public void runLauncher(double speed){
+        motorLaunch.setPower(speed);
+    }*/
+
+    public boolean clawGrip(boolean isOpen){
+        if (isOpen){
+            servoClaw.setPosition(.31);
+        } else {
+            servoClaw.setPosition(.485);
+        }
+        isOpen = !isOpen;
+        return isOpen;
+    }
+
+    public void slideViper(double speed){
+        motorViper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorViper.setPower(speed);
     }
 }
