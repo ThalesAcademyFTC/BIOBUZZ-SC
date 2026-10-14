@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -8,10 +9,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-
+import android.graphics.Color;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 
 public class Johnathan_X {
     private HardwareMap hwMap;
@@ -25,7 +27,7 @@ public class Johnathan_X {
 
     private Drivetrain drive;
     private Telemetry telem;
-
+    public RevColorSensorV3 theColorSensor;
     public DcMotor motorFL, motorFR, motorBL, motorBR, /*motorLaunch,*/ motorViper;
     public DcMotor[] allDriveMotors;
     public Servo servoClaw;
@@ -68,6 +70,11 @@ public class Johnathan_X {
                 motorBL = hwMap.dcMotor.get("motorBL");
                 motorBR = hwMap.dcMotor.get("motorBR");
 
+                theColorSensor = hwMap.get(RevColorSensorV3.class, "theColorSensor");
+                //motorLaunch = hwMap.dcMotor.get("motorLaunch");
+                motorViper = hwMap.dcMotor.get("motorViper");
+                servoClaw = hwMap.servo.get("servoClaw");
+
                 allDriveMotors = new DcMotor[]{motorBR,motorBL,motorFL,motorFR};
                 motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
                 motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -77,7 +84,7 @@ public class Johnathan_X {
                         RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
                 imu.initialize(parameters);*/
                 break;
-            //TEST.YEET
+            //TEST
             case TEST:
                 motorFL = hwMap.dcMotor.get("motorFL");
                 motorFR = hwMap.dcMotor.get("motorFR");
@@ -231,5 +238,15 @@ public class Johnathan_X {
     public void slideViper(double speed){
         motorViper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorViper.setPower(speed);
+    }
+
+    public void getHSV() {
+        final float[] hsvValue = new float[3];
+        NormalizedRGBA color = theColorSensor.getNormalizedColors();
+        Color.colorToHSV(color.toColor(), hsvValue);
+        telem.addData("R", color.red);
+        telem.addData("G", color.green);
+        telem.addData("B", color.blue);
+        telem.update();
     }
 }
