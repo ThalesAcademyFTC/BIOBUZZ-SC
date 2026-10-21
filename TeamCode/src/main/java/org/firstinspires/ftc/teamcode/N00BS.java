@@ -22,6 +22,8 @@ public class N00BS extends LinearOpMode {
     public void runOpMode(){
         johnX = new Johnathan_X(this, Johnathan_X.Drivetrain.TEST);
         int rest = 100;
+        boolean clawOpen = false;
+        clawOpen = johnX.clawGrip(clawOpen);
 
         waitForStart();
         runtime.reset();
@@ -33,6 +35,18 @@ public class N00BS extends LinearOpMode {
             johnX.moveLeftInches(10, .8);
             sleep(rest);
             johnX.moveRightInches(10, .8);
+            sleep(rest);
+            johnX.slide(147,0.8);
+            sleep(rest);
+            clawOpen = johnX.clawGrip(clawOpen);
+            sleep(rest);
+            clawOpen = johnX.clawGrip(clawOpen);
+            sleep(rest);
+            johnX.slide(0, .8);
+            /*sleep(rest);
+            johnX.runLauncher(.8);
+            sleep(2000);
+            johnX.runLauncher(0);*/
         }
     }
 }

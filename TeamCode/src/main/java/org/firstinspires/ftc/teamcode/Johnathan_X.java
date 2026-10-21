@@ -22,13 +22,14 @@ public class Johnathan_X {
 
     public enum Drivetrain {
         JOHNX,
-        TEST
+        TEST,
+        BONES
     }
 
     private Drivetrain drive;
     private Telemetry telem;
     public RevColorSensorV3 theColorSensor;
-    public DcMotor motorFL, motorFR, motorBL, motorBR, /*motorLaunch,*/ motorViper;
+    public DcMotor motorFL, motorFR, motorBL, motorBR, motorLaunch, motorViper;
     public DcMotor[] allDriveMotors;
     public Servo servoClaw;
     /*public IMU imu;
@@ -71,7 +72,7 @@ public class Johnathan_X {
                 motorBR = hwMap.dcMotor.get("motorBR");
 
                 theColorSensor = hwMap.get(RevColorSensorV3.class, "theColorSensor");
-                //motorLaunch = hwMap.dcMotor.get("motorLaunch");
+                motorLaunch = hwMap.dcMotor.get("motorLaunch");
                 motorViper = hwMap.dcMotor.get("motorViper");
                 servoClaw = hwMap.servo.get("servoClaw");
 
@@ -104,52 +105,42 @@ public class Johnathan_X {
                 imu.initialize(parameters);*/
                 break;
 
+            case BONES:
+                motorFL = hwMap.dcMotor.get("motorFL");
+                motorFR = hwMap.dcMotor.get("motorFR");
+                motorBL = hwMap.dcMotor.get("motorBL");
+                motorBR = hwMap.dcMotor.get("motorBR");
+
+                allDriveMotors = new DcMotor[]{motorFL,motorFR,motorBL,motorBR};
+                motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
+                motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+                break;
         }
+
     }
 
     public void rest(){
         motorFL.setPower(0);
-        motorFL.setPower(0);
+        motorFR.setPower(0);
         motorBL.setPower(0);
         motorBR.setPower(0);
     }
     public void move(double x, double y, double turn) {
-        double denominator;
         double FL_Power;
         double FR_Power;
         double BL_Power;
         double BR_Power;
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(turn), 1);
 
-        switch (drive) {
-            //Johnny 9 movement code AKA BigJ
-            case JOHNX:
-                denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(turn), 1);
+        FL_Power = (y + x + turn) / denominator;
+        FR_Power = (y - x - turn) / denominator;
+        BL_Power = (y - x + turn) / denominator;
+        BR_Power = (y + x - turn) / denominator;
 
-                FL_Power = (y + x + turn) / denominator;
-                FR_Power = (y - x - turn) / denominator;
-                BL_Power = (y - x + turn) / denominator;
-                BR_Power = (y + x - turn) / denominator;
-
-                motorFL.setPower(FL_Power);
-                motorFR.setPower(FR_Power);
-                motorBL.setPower(BL_Power);
-                motorBR.setPower(BR_Power);
-                break;
-            // Test is identical for now, but can be changed if needed.
-            case TEST:
-                denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(turn), 1);
-
-                FL_Power = (y + x + turn) / denominator;
-                FR_Power = (y - x - turn) / denominator;
-                BL_Power = (y - x + turn) / denominator;
-                BR_Power = (y + x - turn) / denominator;
-
-                motorFL.setPower(FL_Power);
-                motorFR.setPower(FR_Power);
-                motorBL.setPower(BL_Power);
-                motorBR.setPower(BR_Power);
-                break;
-        }
+        motorFL.setPower(FL_Power);
+        motorFR.setPower(FR_Power);
+        motorBL.setPower(BL_Power);
+        motorBR.setPower(BR_Power);
     }
     public void waitForMotors() {
         boolean finished = false;
@@ -236,8 +227,16 @@ public class Johnathan_X {
     }
 
     public void slideViper(double speed){
+        motorViper.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorViper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorViper.setPower(speed);
+    }
+
+    public void slide(int posOnMe, double robotShowSpeed){
+        motorViper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorViper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorViper.setTargetPosition(posOnMe);
+        motorViper.setPower(robotShowSpeed);
     }
 
     public void getHSV() {

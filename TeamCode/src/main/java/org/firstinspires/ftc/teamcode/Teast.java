@@ -23,7 +23,7 @@ public class Teast extends OpMode {
             x = -x;
         }
         y *= y;
-        if (gamepad1.left_stick_y < 0){
+        if (gamepad1.left_stick_y > 0){
             y = -y;
         }
         if (gamepad1.a){
@@ -59,5 +59,4 @@ public class Teast extends OpMode {
 
         //johnX.runLauncher(gamepad2.right_trigger);
     }
-
 }
