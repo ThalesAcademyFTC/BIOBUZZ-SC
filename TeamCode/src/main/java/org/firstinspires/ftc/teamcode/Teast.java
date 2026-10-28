@@ -57,6 +57,6 @@ public class Teast extends OpMode {
             gamepad2.resetEdgeDetection();
         }
 
-        //johnX.runLauncher(gamepad2.right_trigger);
+        johnX.runLauncher(gamepad2.right_trigger);
     }
 }

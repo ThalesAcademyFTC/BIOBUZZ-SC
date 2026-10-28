@@ -91,7 +91,7 @@ public class Johnathan_X {
                 motorFR = hwMap.dcMotor.get("motorFR");
                 motorBL = hwMap.dcMotor.get("motorBL");
                 motorBR = hwMap.dcMotor.get("motorBR");
-                //motorLaunch = hwMap.dcMotor.get("motorLaunch");
+                motorLaunch = hwMap.dcMotor.get("motorLaunch");
                 motorViper = hwMap.dcMotor.get("motorViper");
                 servoClaw = hwMap.servo.get("servoClaw");
 
@@ -212,9 +212,9 @@ public class Johnathan_X {
         turnRightDegrees(-degrees, -speed);
     }
 
-    /*public void runLauncher(double speed){
+    public void runLauncher(double speed){
         motorLaunch.setPower(speed);
-    }*/
+    }
 
     public boolean clawGrip(boolean isOpen){
         if (isOpen){
