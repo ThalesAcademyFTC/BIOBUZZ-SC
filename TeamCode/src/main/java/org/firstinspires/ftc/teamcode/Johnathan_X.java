@@ -79,6 +79,7 @@ public class Johnathan_X {
                 allDriveMotors = new DcMotor[]{motorBR,motorBL,motorFL,motorFR};
                 motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
                 motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+                motorLaunch.setDirection(DcMotorSimple.Direction.REVERSE);
 
                 /*parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
@@ -98,6 +99,7 @@ public class Johnathan_X {
                 allDriveMotors = new DcMotor[]{motorBR,motorBL,motorFL,motorFR};
                 motorBL.setDirection(DcMotorSimple.Direction.REVERSE);
                 motorFL.setDirection(DcMotorSimple.Direction.REVERSE);
+                motorLaunch.setDirection(DcMotorSimple.Direction.REVERSE);
 
                 /*parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
@@ -218,9 +220,9 @@ public class Johnathan_X {
 
     public boolean clawGrip(boolean isOpen){
         if (isOpen){
-            servoClaw.setPosition(.31);
+            servoClaw.setPosition(.585);
         } else {
-            servoClaw.setPosition(.485);
+            servoClaw.setPosition(.9);
         }
         isOpen = !isOpen;
         return isOpen;
