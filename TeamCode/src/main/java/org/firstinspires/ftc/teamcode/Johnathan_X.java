@@ -1,19 +1,19 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import android.graphics.Color;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
+
 
 public class Johnathan_X {
     private HardwareMap hwMap;
@@ -26,12 +26,13 @@ public class Johnathan_X {
         BONES
     }
 
-    private Drivetrain drive;
-    private Telemetry telem;
+    static private Drivetrain drive;
+    static private Telemetry telem;
     public RevColorSensorV3 theColorSensor;
     public DcMotor motorFL, motorFR, motorBL, motorBR, motorLaunch, motorViper;
     public DcMotor[] allDriveMotors;
     public Servo servoClaw;
+    public Limelight3A cam;
     /*public IMU imu;
     private IMU.Parameters parameters;*/
     public AprilTagProcessor aprilTag;
@@ -195,6 +196,12 @@ public class Johnathan_X {
         moveRightInches(-inches, -speed);
     }
 
+    public void initCam() {
+        cam = hwMap.get(Limelight3A.class, "limelight");
+        cam.setPollRateHz(100); // Sets to check for data 100 times every second
+        cam.start(); // Tells Limelight to start looking
+    }
+
     public void turnRightDegrees(double degrees, double speed){
         int tickTarget = (int) Math.round(degrees * X_DEGREE_TICKS);
         resetDriveEncoders();
@@ -234,7 +241,7 @@ public class Johnathan_X {
         motorViper.setPower(speed);
     }
 
-    public void slide(int posOnMe, double robotShowSpeed){
+    public void slideSet(int posOnMe, double robotShowSpeed){
         motorViper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorViper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorViper.setTargetPosition(posOnMe);

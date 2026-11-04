@@ -36,13 +36,13 @@ public class N00BS extends LinearOpMode {
             sleep(rest);
             johnX.moveRightInches(10, .8);
             sleep(rest);
-            johnX.slide(147,0.8);
+            johnX.slideSet(147,0.8);
             sleep(rest);
             clawOpen = johnX.clawGrip(clawOpen);
             sleep(rest);
             clawOpen = johnX.clawGrip(clawOpen);
             sleep(rest);
-            johnX.slide(0, .8);
+            johnX.slideSet(0, .8);
             /*sleep(rest);
             johnX.runLauncher(.8);
             sleep(2000);
